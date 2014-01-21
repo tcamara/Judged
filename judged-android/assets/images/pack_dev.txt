@@ -1,0 +1,25 @@
+pack_dev.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+gradient
+  rotate: false
+  xy: 2, 2
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+skeleton_priest_large
+  rotate: false
+  xy: 1984, 2
+  size: 58, 96
+  orig: 58, 96
+  offset: 0, 0
+  index: -1
+shrine_large
+  rotate: false
+  xy: 1924, 2
+  size: 58, 170
+  orig: 58, 170
+  offset: 0, 0
+  index: -1
