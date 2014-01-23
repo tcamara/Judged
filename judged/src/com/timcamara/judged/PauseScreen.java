@@ -10,11 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-public class LevelEndScreen implements Screen {
+public class PauseScreen implements Screen {
 	private Stage stage;
 	private JudgedGame game;
 	
-	public LevelEndScreen(JudgedGame game) {
+	public PauseScreen(JudgedGame game) {
 		this.game = game;
 		
 		stage = new Stage(JudgedGame.screen_width, JudgedGame.screen_height, true);

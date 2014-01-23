@@ -10,8 +10,8 @@ import com.artemis.managers.TagManager;
 import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.math.Vector3;
+import com.timcamara.judged.GameEndScreen;
 import com.timcamara.judged.JudgedGame;
-import com.timcamara.judged.LevelEndScreen;
 import com.timcamara.judged.components.Damage;
 import com.timcamara.judged.components.Graphic;
 import com.timcamara.judged.components.Health;
@@ -88,7 +88,9 @@ public class CollisionSystem extends EntityProcessingSystem {
 			// Heretic is dead
 			heretic.deleteFromWorld();
 			player.change_score(worth.value);
-			System.out.println("Score: " + player.score);
+			if(JudgedGame.dev_mode) {
+				System.out.println("Score: " + player.score);
+			}
 		}
 	}
 	
@@ -101,10 +103,12 @@ public class CollisionSystem extends EntityProcessingSystem {
 		if(temple_health.hit(heretic_damage.amount)) {
 			// Temple is destroyed
 			temple.deleteFromWorld();
-			player.change_score(worth.value);
-			System.out.println("Score: " + player.score);
 			
-			game.setScreen(new LevelEndScreen(game, true, player.score));
+			if(JudgedGame.dev_mode) {
+				System.out.println("Score: " + player.score);
+			}
+			
+			game.setScreen(new GameEndScreen(game, player.score));
 		}
 		
 		// Heretic is dead

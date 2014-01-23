@@ -1,0 +1,39 @@
+menu_pack.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+next
+  rotate: false
+  xy: 184, 826
+  size: 180, 100
+  orig: 180, 100
+  offset: 0, 0
+  index: -1
+retry
+  rotate: false
+  xy: 2, 826
+  size: 180, 100
+  orig: 180, 100
+  offset: 0, 0
+  index: -1
+start
+  rotate: false
+  xy: 2, 724
+  size: 180, 100
+  orig: 180, 100
+  offset: 0, 0
+  index: -1
+quit
+  rotate: false
+  xy: 184, 724
+  size: 180, 100
+  orig: 180, 100
+  offset: 0, 0
+  index: -1
+gradient_small
+  rotate: false
+  xy: 2, 2
+  size: 1280, 720
+  orig: 1280, 720
+  offset: 0, 0
+  index: -1

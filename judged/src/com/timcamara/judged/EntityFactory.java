@@ -6,14 +6,12 @@ import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.timcamara.judged.components.Believer;
-import com.timcamara.judged.components.Button;
 import com.timcamara.judged.components.Damage;
 import com.timcamara.judged.components.Graphic;
 import com.timcamara.judged.components.Health;
 import com.timcamara.judged.components.Heretic;
 import com.timcamara.judged.components.Player;
 import com.timcamara.judged.components.Position;
-import com.timcamara.judged.components.Text;
 import com.timcamara.judged.components.Velocity;
 import com.timcamara.judged.components.Worth;
 
@@ -35,7 +33,7 @@ public class EntityFactory {
 		temple.addComponent(new Believer());
 		temple.addComponent(g);
 		temple.addComponent(new Position(((JudgedGame.world_width / 2) - 1), ((JudgedGame.world_height / 2) - 1)));
-		temple.addComponent(new Health(3000));
+		temple.addComponent(new Health(3));
 		temple.addComponent(new Worth(-1));
 		world.getManager(GroupManager.class).add(temple, "TEMPLES");
 		temple.addToWorld();
@@ -56,25 +54,6 @@ public class EntityFactory {
 		heretic.addToWorld();
 		
 		return heretic;
-	}
-	
-	public static Entity createText(World world, String str, float x, float y) {
-		Entity text = world.createEntity();
-		text.addComponent(new Text(str));
-		text.addComponent(new Position(x, y));
-		text.addToWorld();
-		
-		return text;
-	}
-	
-	public static Entity createButton(World world, String str, float x, float y) {
-		Entity button = world.createEntity();
-		button.addComponent(new Text(str));
-		button.addComponent(new Button(str));
-		button.addComponent(new Position(x, y));
-		button.addToWorld();
-		
-		return button;
 	}
 	
 	public static Entity createBackground(World world, TextureAtlas atlas, String mode) {
