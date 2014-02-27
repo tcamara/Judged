@@ -10,8 +10,8 @@ import com.artemis.managers.TagManager;
 import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.math.Vector3;
-import com.timcamara.judged.GameEndScreen;
 import com.timcamara.judged.JudgedGame;
+import com.timcamara.judged.Level;
 import com.timcamara.judged.components.Damage;
 import com.timcamara.judged.components.Graphic;
 import com.timcamara.judged.components.Health;
@@ -20,6 +20,7 @@ import com.timcamara.judged.components.Player;
 import com.timcamara.judged.components.Position;
 import com.timcamara.judged.components.Velocity;
 import com.timcamara.judged.components.Worth;
+import com.timcamara.judged.screens.MenuScreen;
 
 public class CollisionSystem extends EntityProcessingSystem {
 	@Mapper ComponentMapper<Damage>  dm;
@@ -32,12 +33,14 @@ public class CollisionSystem extends EntityProcessingSystem {
 	private World       world;
 	private InputSystem is;
 	private Player      player;
+	private Level		level;
 	
 	@SuppressWarnings("unchecked")
 	public CollisionSystem(World world, JudgedGame game) {
 		super(Aspect.getAspectForAll(Heretic.class, Position.class, Graphic.class, Velocity.class));
 		
-		this.game = game;
+		this.game  = game;
+		this.level = JudgedGame.levels.get(JudgedGame.level);
 		
 		// Get InputSystem
 		this.world = world;
@@ -53,8 +56,16 @@ public class CollisionSystem extends EntityProcessingSystem {
 			hereticPlayerCollision(e);
 		}
 		
-		// Check for collisions with temples
+		// Get temples
 		ImmutableBag<Entity> bag = world.getManager(GroupManager.class).getEntities("TEMPLES");
+		
+		// If no more temples left, level is lost
+		if(bag.isEmpty()) {
+			JudgedGame.score = player.score;
+			game.setScreen(new MenuScreen(game, JudgedGame.menus.LEVEL_LOSS));
+		}
+		
+		// Check for collisions with temples
 		for(int i = 0; i < bag.size(); i++) {
 			Entity temple = bag.get(i);
 			if(collisionExists(gm.get(e), gm.get(temple))) {
@@ -87,9 +98,18 @@ public class CollisionSystem extends EntityProcessingSystem {
 		if(heretic_health.hit()) {
 			// Heretic is dead
 			heretic.deleteFromWorld();
+			
+			// Add heretic's worth to player's score
 			player.change_score(worth.value);
+			
 			if(JudgedGame.dev_mode) {
 				System.out.println("Score: " + player.score);
+			}
+			
+			// If we've reached the goal score, end the level
+			if(player.score >= level.goal_score) {
+				JudgedGame.score = player.score;
+				game.setScreen(new MenuScreen(game, JudgedGame.menus.LEVEL_WIN));
 			}
 		}
 	}
@@ -97,18 +117,11 @@ public class CollisionSystem extends EntityProcessingSystem {
 	private void hereticTempleCollision(Entity heretic, Entity temple) {
 		Damage heretic_damage = dm.get(heretic);
 		Health temple_health  = hm.get(temple);
-		Worth worth = wm.get(temple);
 		
 		// Deal damage to the temple
 		if(temple_health.hit(heretic_damage.amount)) {
 			// Temple is destroyed
 			temple.deleteFromWorld();
-			
-			if(JudgedGame.dev_mode) {
-				System.out.println("Score: " + player.score);
-			}
-			
-			game.setScreen(new GameEndScreen(game, player.score));
 		}
 		
 		// Heretic is dead

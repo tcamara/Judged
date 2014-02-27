@@ -48,7 +48,7 @@ public class HereticMovementSystem extends EntityProcessingSystem {
 		}
 		
 		// Set velocity to aim for closest temple
-		velocity.set(Heretic.speed, (float)Math.toDegrees(Math.atan2(closest_temple.y - current_position.y, closest_temple.x - current_position.x)) - 90);
+		velocity.set(velocity.speed_max, (float)Math.toDegrees(Math.atan2(closest_temple.y - current_position.y, closest_temple.x - current_position.x)) - 90);
 		
 		// Calculate new position based on velocity
 		position.add(velocity.speed.x * world.delta, velocity.speed.y * world.delta);

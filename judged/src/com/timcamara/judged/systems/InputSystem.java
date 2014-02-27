@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.timcamara.judged.JudgedGame;
 import com.timcamara.judged.components.Player;
 import com.timcamara.judged.components.Position;
 
@@ -35,7 +36,9 @@ public class InputSystem extends EntityProcessingSystem implements InputProcesso
 	
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-//		System.out.println("TouchDown on: (" + screenX + ", " + screenY + ")");
+		if(JudgedGame.dev_mode) {
+			System.out.println("TouchDown on: (" + screenX + ", " + screenY + ")");
+		}
 		
 		touch.set(screenX, screenY, 0);
 		camera.unproject(touch); // Unprojecting gets us the coordinates in the proper coordinate system
