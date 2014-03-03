@@ -31,7 +31,7 @@ public class CollisionSystem extends EntityProcessingSystem {
 	
 	private JudgedGame  game;
 	private World       world;
-	private InputSystem is;
+	private InputSystem inputSystem;
 	private Player      player;
 	private Level		level;
 	
@@ -44,7 +44,7 @@ public class CollisionSystem extends EntityProcessingSystem {
 		
 		// Get InputSystem
 		this.world = world;
-		is = world.getSystem(InputSystem.class);
+		inputSystem = world.getSystem(InputSystem.class);
 	}
 	
 	@Override
@@ -52,7 +52,7 @@ public class CollisionSystem extends EntityProcessingSystem {
 		player = pm.get(world.getManager(TagManager.class).getEntity("PLAYER"));
 		
 		// Check for collisions with touch event (e.g., hit by player)
-		if(is.is_touched && pointCollisionExists(gm.get(e), is.touch)) {
+		if(inputSystem.is_touched && pointCollisionExists(gm.get(e), inputSystem.touch)) {
 			hereticPlayerCollision(e);
 		}
 		

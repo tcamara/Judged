@@ -27,6 +27,11 @@ public class GraphicRenderSystem extends EntitySystem {
 		this.world_camera = world_camera;
 	}
 	
+	// TODO: this should really be built into artemis
+	public void dispose() {
+		batch.dispose();
+	}
+	
 	@Override
 	protected void initialize() {
 		batch = new SpriteBatch();

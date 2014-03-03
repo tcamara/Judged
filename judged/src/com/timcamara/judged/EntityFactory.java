@@ -4,10 +4,10 @@ import com.artemis.Entity;
 import com.artemis.World;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -22,25 +22,24 @@ import com.timcamara.judged.components.Velocity;
 import com.timcamara.judged.components.Worth;
 
 public class EntityFactory {
-	private static Skin button_skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-	
 	public static Actor createTable() {
 		Table table = new Table();
 		table.setFillParent(true);
+		table.debug();
 		
 		return table;
 	}
 	
-	public static Actor createLabel(String text, float x, float y) {
+	public static Actor createLabel(String text, Skin button_skin, float x, float y) {
 		Label label = new Label(text, button_skin);
 		label.setPosition(x, y);
 		
 		return label;
 	}
 	
-	public static Actor createButton(String text, float x, float y, InputListener inputListener) {
+	public static Actor createButton(String text, Skin button_skin, float x, float y, InputListener inputListener) {
 		TextButton button = new TextButton(text, button_skin);
-		button.setPosition(x, y);
+		Container wrapper = new Container(button);
 		button.addListener(inputListener);
 		
 		return button;

@@ -127,6 +127,7 @@ public class GameScreen implements Screen {
 	
 	@Override
 	public void dispose() {
-		
+		atlas.dispose();
+		graphicRenderSystem.dispose();
 	}
 }
