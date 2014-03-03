@@ -9,7 +9,9 @@ import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
 import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.ImmutableBag;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.math.Vector3;
+import com.timcamara.judged.EntityFactory;
 import com.timcamara.judged.JudgedGame;
 import com.timcamara.judged.Level;
 import com.timcamara.judged.components.Damage;
@@ -29,18 +31,20 @@ public class CollisionSystem extends EntityProcessingSystem {
 	@Mapper ComponentMapper<Player>  pm;
 	@Mapper ComponentMapper<Worth>   wm;
 	
-	private JudgedGame  game;
-	private World       world;
-	private InputSystem inputSystem;
-	private Player      player;
-	private Level		level;
+	private JudgedGame         game;
+	private World              world;
+	private InputSystem        inputSystem;
+	private Player             player;
+	private Level		       level;
+	private ParticleEffectPool particle_effect_pool;
 	
 	@SuppressWarnings("unchecked")
-	public CollisionSystem(World world, JudgedGame game) {
+	public CollisionSystem(World world, JudgedGame game, ParticleEffectPool particle_effect_pool) {
 		super(Aspect.getAspectForAll(Heretic.class, Position.class, Graphic.class, Velocity.class));
 		
-		this.game  = game;
-		this.level = JudgedGame.levels.get(JudgedGame.level);
+		this.game                 = game;
+		this.level                = JudgedGame.levels.get(JudgedGame.level);
+		this.particle_effect_pool = particle_effect_pool;
 		
 		// Get InputSystem
 		this.world = world;
@@ -53,7 +57,7 @@ public class CollisionSystem extends EntityProcessingSystem {
 		
 		// Check for collisions with touch event (e.g., hit by player)
 		if(inputSystem.is_touched && pointCollisionExists(gm.get(e), inputSystem.touch)) {
-			hereticPlayerCollision(e);
+			hereticPlayerCollision(e, inputSystem.touch);
 		}
 		
 		// Get temples
@@ -90,9 +94,12 @@ public class CollisionSystem extends EntityProcessingSystem {
 	// Collision Handling //
 	////////////////////////
 	
-	private void hereticPlayerCollision(Entity heretic) {
+	private void hereticPlayerCollision(Entity heretic, Vector3 touchPos) {
 		Health heretic_health  = hm.get(heretic);
-		Worth worth = wm.get(heretic);
+		Worth worth            = wm.get(heretic);
+		
+		// Play effect
+		EntityFactory.createPooledEffect(world, particle_effect_pool, touchPos.x, touchPos.y);
 		
 		// Deal damage to the heretic
 		if(heretic_health.hit()) {

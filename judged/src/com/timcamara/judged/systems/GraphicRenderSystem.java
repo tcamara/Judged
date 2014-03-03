@@ -27,7 +27,7 @@ public class GraphicRenderSystem extends EntitySystem {
 		this.world_camera = world_camera;
 	}
 	
-	// TODO: this should really be built into artemis
+	// TODO: this should really be built into Artemis
 	public void dispose() {
 		batch.dispose();
 	}
@@ -63,10 +63,9 @@ public class GraphicRenderSystem extends EntitySystem {
 		Vector3 unprojected = new Vector3(position.x, position.y, 0);
 		world_camera.project(unprojected);
 		
-		// Set rotation and position, then draw sprite
-		graphic.sprite.setRotation(position.rotation % 360);
-		graphic.sprite.setPosition(unprojected.x, unprojected.y);
-		graphic.sprite.draw(batch);
+		// Set position, then call the draw method in the graphic component
+		graphic.setPosition(unprojected.x, unprojected.y);
+		graphic.draw(batch);
 	}
 	
 	@Override

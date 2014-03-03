@@ -2,7 +2,7 @@ package com.timcamara.judged.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -34,11 +34,13 @@ public class MenuScreen implements Screen {
 		stage = new Stage(JudgedGame.screen_width, JudgedGame.screen_height, true);
 		Gdx.input.setInputProcessor(stage);
 		
-		stage.addActor(EntityFactory.createTable());
+		Table table = EntityFactory.createTable();
+		stage.addActor(table);
 		
 		if(menu == JudgedGame.menus.TITLE) {
-			stage.addActor(EntityFactory.createLabel("Judged", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 + 100));
-			stage.addActor(EntityFactory.createButton("Start", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2, new InputListener() {
+			EntityFactory.createLabel("Judged", button_skin, table);
+			table.row();
+			EntityFactory.createButton("Start", button_skin, table, new InputListener() {
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 						if(JudgedGame.dev_mode) {
 							System.out.println("start button pressed");
@@ -48,11 +50,12 @@ public class MenuScreen implements Screen {
 						return true;
 					}
 				}
-			));
+			);
 		}
 		else if(menu == JudgedGame.menus.PAUSE) {
-			stage.addActor(EntityFactory.createLabel("Paused", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 + 100));
-			stage.addActor(EntityFactory.createButton("Continue", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 - 100, new InputListener() {
+			EntityFactory.createLabel("Paused", button_skin, table);
+			table.row();
+			EntityFactory.createButton("Continue", button_skin, table, new InputListener() {
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 						if(JudgedGame.dev_mode) {
 							System.out.println("continue button pressed");
@@ -62,8 +65,9 @@ public class MenuScreen implements Screen {
 						return true;
 					}
 				}
-			));
-			stage.addActor(EntityFactory.createButton("Quit", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 - 200, new InputListener() {
+			);
+			table.row();
+			EntityFactory.createButton("Quit", button_skin, table, new InputListener() {
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 						if(JudgedGame.dev_mode) {
 							System.out.println("quit button pressed");
@@ -73,12 +77,14 @@ public class MenuScreen implements Screen {
 						return true;
 					}
 				}
-			));
+			);
 		}
 		else if(menu == JudgedGame.menus.LEVEL_LOSS) {
-			stage.addActor(EntityFactory.createLabel("Level Failed", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 + 100));
-			stage.addActor(EntityFactory.createLabel("Your Score: " + JudgedGame.score, button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2));
-			stage.addActor(EntityFactory.createButton("Retry", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 - 100, new InputListener() {
+			EntityFactory.createLabel("Level Failed", button_skin, table);
+			table.row();
+			EntityFactory.createLabel("Your Score: " + JudgedGame.score, button_skin, table);
+			table.row();
+			EntityFactory.createButton("Retry", button_skin, table, new InputListener() {
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 						if(JudgedGame.dev_mode) {
 							System.out.println("retry button pressed");
@@ -88,8 +94,9 @@ public class MenuScreen implements Screen {
 						return true;
 					}
 				}
-			));
-			stage.addActor(EntityFactory.createButton("Quit", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 - 200, new InputListener() {
+			);
+			table.row();
+			EntityFactory.createButton("Quit", button_skin, table, new InputListener() {
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 						if(JudgedGame.dev_mode) {
 							System.out.println("quit button pressed");
@@ -99,12 +106,14 @@ public class MenuScreen implements Screen {
 						return true;
 					}
 				}
-			));
+			);
 		}
 		else if(menu == JudgedGame.menus.LEVEL_WIN) {
-			stage.addActor(EntityFactory.createLabel("Level Complete", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 + 100));
-			stage.addActor(EntityFactory.createLabel("Your Score: " + JudgedGame.score, button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2));
-			stage.addActor(EntityFactory.createButton("Continue", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 - 100, new InputListener() {
+			EntityFactory.createLabel("Level Complete", button_skin, table);
+			table.row();
+			EntityFactory.createLabel("Your Score: " + JudgedGame.score, button_skin, table);
+			table.row();
+			EntityFactory.createButton("Continue", button_skin, table, new InputListener() {
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 						if(JudgedGame.dev_mode) {
 							System.out.println("continue button pressed");
@@ -114,8 +123,9 @@ public class MenuScreen implements Screen {
 						return true;
 					}
 				}
-			));
-			stage.addActor(EntityFactory.createButton("Quit", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 - 200, new InputListener() {
+			);
+			table.row();
+			EntityFactory.createButton("Quit", button_skin, table, new InputListener() {
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 						if(JudgedGame.dev_mode) {
 							System.out.println("quit button pressed");
@@ -125,12 +135,14 @@ public class MenuScreen implements Screen {
 						return true;
 					}
 				}
-			));
+			);
 		}
 		else if(menu == JudgedGame.menus.GAME_WIN) {
-			stage.addActor(EntityFactory.createLabel("You Win", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 + 100));
-			stage.addActor(EntityFactory.createLabel("Your Score: " + JudgedGame.score, button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2));
-			stage.addActor(EntityFactory.createButton("Play Again", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 - 100, new InputListener() {
+			EntityFactory.createLabel("You Win", button_skin, table);
+			table.row();
+			EntityFactory.createLabel("Your Score: " + JudgedGame.score, button_skin, table);
+			table.row();
+			EntityFactory.createButton("Play Again", button_skin, table, new InputListener() {
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 						if(JudgedGame.dev_mode) {
 							System.out.println("play again button pressed");
@@ -140,8 +152,9 @@ public class MenuScreen implements Screen {
 						return true;
 					}
 				}
-			));
-			stage.addActor(EntityFactory.createButton("Quit", button_skin, JudgedGame.screen_width / 2, JudgedGame.screen_height / 2 - 200, new InputListener() {
+			);
+			table.row();
+			EntityFactory.createButton("Quit", button_skin, table, new InputListener() {
 					public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 						if(JudgedGame.dev_mode) {
 							System.out.println("quit button pressed");
@@ -151,11 +164,10 @@ public class MenuScreen implements Screen {
 						return true;
 					}
 				}
-			));
+			);
 		}
 		else {
-			System.out.println("Incorrect value passed to MenuScreen: " + menu.toString());
-			exitGame();
+			throw new IllegalArgumentException("Incorrect value passed to MenuScreen: " + menu.toString());
 		}
 	}
 	
@@ -175,12 +187,14 @@ public class MenuScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0,0,0.2f,1);
-	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	    
 	    stage.act(Gdx.graphics.getDeltaTime());
 	    stage.draw();
 	    
-	    Table.drawDebug(stage);
+	    if(JudgedGame.dev_mode) {
+	    	Table.drawDebug(stage);
+		}
 	}
 	
 	@Override
@@ -195,7 +209,7 @@ public class MenuScreen implements Screen {
 	
 	@Override
 	public void hide() {
-		
+		dispose();
 	}
 	
 	@Override

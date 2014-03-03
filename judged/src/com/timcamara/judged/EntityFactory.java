@@ -4,10 +4,12 @@ import com.artemis.Entity;
 import com.artemis.World;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -22,27 +24,48 @@ import com.timcamara.judged.components.Velocity;
 import com.timcamara.judged.components.Worth;
 
 public class EntityFactory {
-	public static Actor createTable() {
+	
+	public static ParticleEffectPool createParticleEffectPool(String location, float x, float y, int initialCapacity, int max) {
+		ParticleEffect prototype = new ParticleEffect();
+		prototype.load(Gdx.files.internal(location), Gdx.files.internal("images"));
+		prototype.setPosition(x, y);
+		
+		ParticleEffectPool pool = new ParticleEffectPool(prototype, initialCapacity, max);
+		
+		return pool;
+	}
+	
+	public static PooledEffect createPooledEffect(World world, ParticleEffectPool pool, float x, float y) {
+		PooledEffect pooled_effect = pool.obtain();
+		pooled_effect.setPosition(x, y);
+		
+		Entity effect = world.createEntity();
+		effect.addComponent(new Graphic(pooled_effect));
+		
+		return pooled_effect;
+	}
+	
+	public static Table createTable() {
 		Table table = new Table();
 		table.setFillParent(true);
-		table.debug();
+		if(JudgedGame.dev_mode) {
+			table.debug();
+		}
 		
 		return table;
 	}
 	
-	public static Actor createLabel(String text, Skin button_skin, float x, float y) {
+	public static void createLabel(String text, Skin button_skin, Table table) {
 		Label label = new Label(text, button_skin);
-		label.setPosition(x, y);
 		
-		return label;
+		table.add(label).padBottom(10);
 	}
 	
-	public static Actor createButton(String text, Skin button_skin, float x, float y, InputListener inputListener) {
+	public static void createButton(String text, Skin button_skin, Table table, InputListener inputListener) {
 		TextButton button = new TextButton(text, button_skin);
-		Container wrapper = new Container(button);
 		button.addListener(inputListener);
 		
-		return button;
+		table.add(button).pad(10);
 	}
 	
 	public static Entity createPlayer(World world) {
@@ -82,7 +105,7 @@ public class EntityFactory {
 	
 	public static Entity createBackground(World world, TextureAtlas atlas, String region_name) {
 		Entity bg = world.createEntity();
-		bg.addComponent(new Graphic(atlas.findRegion(region_name), 0));
+		bg.addComponent(new Graphic(atlas.findRegion(region_name)));
 		bg.addComponent(new Position(0, 0));
 		bg.addToWorld();
 		

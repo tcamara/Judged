@@ -6,8 +6,9 @@ import com.artemis.managers.TagManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.timcamara.judged.EntityFactory;
 import com.timcamara.judged.JudgedGame;
@@ -51,12 +52,15 @@ public class GameScreen implements Screen {
 		// Set up the world
 		level = JudgedGame.levels.get(JudgedGame.level);
 		
+		// Prepare for effects
+		ParticleEffectPool particle_effect_pool = EntityFactory.createParticleEffectPool("effects/first.p", 0, 0, 0, 70);
+		
 		world = new World();
 		graphicRenderSystem   = world.setSystem(new GraphicRenderSystem(screen_camera, world_camera), true);
 		hereticMovementSystem = world.setSystem(new HereticMovementSystem(), true);
 		hereticSpawnerSystem  = world.setSystem(new HereticSpawnerSystem(atlas, level), true);
 		inputSystem           = world.setSystem(new InputSystem(screen_camera), true);
-		collisionSystem       = world.setSystem(new CollisionSystem(world, game), true);
+		collisionSystem       = world.setSystem(new CollisionSystem(world, game, particle_effect_pool), true);
 		world.initialize();
 		world.setManager(new GroupManager());
 		world.setManager(new TagManager());
@@ -77,7 +81,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0,0,0.2f,1);
-	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	    
 	    screen_camera.update();
 	    world_camera.update();
@@ -112,7 +116,7 @@ public class GameScreen implements Screen {
 	
 	@Override
 	public void hide() {
-		
+		dispose();
 	}
 	
 	@Override
