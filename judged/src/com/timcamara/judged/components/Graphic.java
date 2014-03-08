@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.timcamara.judged.JudgedGame;
 
 public class Graphic extends Component {
 	public Sprite       sprite;
@@ -30,12 +31,14 @@ public class Graphic extends Component {
 		effect = pe;
 	}
 	
-	public void setPosition(float x, float y) {
+	public void setPosition(float x, float y, float delta) {
 		if(type == types.SPRITE) {
 			this.sprite.setPosition(x, y);
 		}
 		else if(type == types.EFFECT) {
+			y = JudgedGame.screen_height - y; // TODO: this really shouldn't be necessary
 			effect.setPosition(x, y);
+			effect.update(delta);
 		}
 		else {
 			throw new IllegalArgumentException("Graphic.setPosition called with invalid type.");
@@ -48,10 +51,6 @@ public class Graphic extends Component {
 		}
 		else if(type == types.EFFECT) {
 			effect.draw(batch);
-			
-			if(effect.isComplete()) {
-				effect.free();
-			}
 		}
 		else {
 			throw new IllegalArgumentException("Graphic.draw called with invalid type.");

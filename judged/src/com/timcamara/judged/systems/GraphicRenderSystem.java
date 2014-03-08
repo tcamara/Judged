@@ -6,11 +6,13 @@ import com.artemis.Entity;
 import com.artemis.EntitySystem;
 import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.timcamara.judged.components.Graphic;
 import com.timcamara.judged.components.Position;
+import com.timcamara.judged.components.Graphic.types;
 
 public class GraphicRenderSystem extends EntitySystem {
 	@Mapper ComponentMapper<Position> pm;
@@ -64,8 +66,13 @@ public class GraphicRenderSystem extends EntitySystem {
 		world_camera.project(unprojected);
 		
 		// Set position, then call the draw method in the graphic component
-		graphic.setPosition(unprojected.x, unprojected.y);
+		graphic.setPosition(unprojected.x, unprojected.y, Gdx.graphics.getDeltaTime());
 		graphic.draw(batch);
+		
+		if(graphic.type == Graphic.types.EFFECT && graphic.effect.isComplete()) {
+			graphic.effect.free();
+			e.deleteFromWorld();
+		}
 	}
 	
 	@Override

@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.timcamara.judged.EntityFactory;
@@ -32,6 +33,8 @@ public class GameScreen implements Screen {
 	private CollisionSystem       collisionSystem;
 	private FPSLogger             fps;
 	private Level				  level;
+	private ParticleEffect        particle_effect;
+	private ParticleEffectPool    particle_effect_pool;
 	
 	public GameScreen(JudgedGame game) {
 		// Load texture atlas
@@ -53,14 +56,15 @@ public class GameScreen implements Screen {
 		level = JudgedGame.levels.get(JudgedGame.level);
 		
 		// Prepare for effects
-		ParticleEffectPool particle_effect_pool = EntityFactory.createParticleEffectPool("effects/first.p", 0, 0, 0, 70);
+		particle_effect = EntityFactory.createParticleEffect("effects/first.p");
+		particle_effect_pool = EntityFactory.createParticleEffectPool(particle_effect, 0, 70);
 		
 		world = new World();
 		graphicRenderSystem   = world.setSystem(new GraphicRenderSystem(screen_camera, world_camera), true);
 		hereticMovementSystem = world.setSystem(new HereticMovementSystem(), true);
 		hereticSpawnerSystem  = world.setSystem(new HereticSpawnerSystem(atlas, level), true);
 		inputSystem           = world.setSystem(new InputSystem(screen_camera), true);
-		collisionSystem       = world.setSystem(new CollisionSystem(world, game, particle_effect_pool), true);
+		collisionSystem       = world.setSystem(new CollisionSystem(world, game, world_camera, particle_effect_pool), true);
 		world.initialize();
 		world.setManager(new GroupManager());
 		world.setManager(new TagManager());
@@ -132,6 +136,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		atlas.dispose();
+		particle_effect.dispose();
 		graphicRenderSystem.dispose();
 	}
 }

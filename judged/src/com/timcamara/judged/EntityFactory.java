@@ -25,11 +25,14 @@ import com.timcamara.judged.components.Worth;
 
 public class EntityFactory {
 	
-	public static ParticleEffectPool createParticleEffectPool(String location, float x, float y, int initialCapacity, int max) {
+	public static ParticleEffect createParticleEffect(String location) {
 		ParticleEffect prototype = new ParticleEffect();
-		prototype.load(Gdx.files.internal(location), Gdx.files.internal("images"));
-		prototype.setPosition(x, y);
+		prototype.load(Gdx.files.internal(location), Gdx.files.internal("effects"));
 		
+		return prototype;
+	}
+	
+	public static ParticleEffectPool createParticleEffectPool(ParticleEffect prototype, int initialCapacity, int max) {
 		ParticleEffectPool pool = new ParticleEffectPool(prototype, initialCapacity, max);
 		
 		return pool;
@@ -41,6 +44,8 @@ public class EntityFactory {
 		
 		Entity effect = world.createEntity();
 		effect.addComponent(new Graphic(pooled_effect));
+		effect.addComponent(new Position(x, y));
+		effect.addToWorld();
 		
 		return pooled_effect;
 	}

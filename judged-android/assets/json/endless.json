@@ -1,0 +1,29 @@
+{
+levels: [
+	{
+		spawn_rate: 1.012,
+		goal_score: 10000,
+		background: gradient,
+		enemies: [
+			{
+				speed: 2,
+				worth: 1,
+				damage: 1,
+				spawn_chance: 100,
+				image: skeleton_priest_large,
+				health: 1
+			}
+		],
+		temples: [
+			{
+				position: {
+					x: 7,
+					y: 3
+				},
+				image: shrine_large,
+				health: 30000
+			}
+		]
+	}
+]
+}

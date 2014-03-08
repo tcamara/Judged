@@ -9,6 +9,7 @@ import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
 import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.ImmutableBag;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.math.Vector3;
 import com.timcamara.judged.EntityFactory;
@@ -37,14 +38,16 @@ public class CollisionSystem extends EntityProcessingSystem {
 	private Player             player;
 	private Level		       level;
 	private ParticleEffectPool particle_effect_pool;
+	private OrthographicCamera world_camera;
 	
 	@SuppressWarnings("unchecked")
-	public CollisionSystem(World world, JudgedGame game, ParticleEffectPool particle_effect_pool) {
+	public CollisionSystem(World world, JudgedGame game, OrthographicCamera world_camera, ParticleEffectPool particle_effect_pool) {
 		super(Aspect.getAspectForAll(Heretic.class, Position.class, Graphic.class, Velocity.class));
 		
 		this.game                 = game;
 		this.level                = JudgedGame.levels.get(JudgedGame.level);
 		this.particle_effect_pool = particle_effect_pool;
+		this.world_camera         = world_camera;
 		
 		// Get InputSystem
 		this.world = world;
@@ -98,8 +101,12 @@ public class CollisionSystem extends EntityProcessingSystem {
 		Health heretic_health  = hm.get(heretic);
 		Worth worth            = wm.get(heretic);
 		
+		// Translate from world coordinates to screen coordinates
+		Vector3 unprojected = new Vector3(touchPos.x, touchPos.y, 0);
+		world_camera.unproject(unprojected);
+		
 		// Play effect
-		EntityFactory.createPooledEffect(world, particle_effect_pool, touchPos.x, touchPos.y);
+		EntityFactory.createPooledEffect(world, particle_effect_pool, unprojected.x, unprojected.y);
 		
 		// Deal damage to the heretic
 		if(heretic_health.hit()) {
