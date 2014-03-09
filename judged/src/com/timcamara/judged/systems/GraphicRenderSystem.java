@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.timcamara.judged.components.Graphic;
 import com.timcamara.judged.components.Position;
-import com.timcamara.judged.components.Graphic.types;
 
 public class GraphicRenderSystem extends EntitySystem {
 	@Mapper ComponentMapper<Position> pm;
@@ -67,12 +66,7 @@ public class GraphicRenderSystem extends EntitySystem {
 		
 		// Set position, then call the draw method in the graphic component
 		graphic.setPosition(unprojected.x, unprojected.y, Gdx.graphics.getDeltaTime());
-		graphic.draw(batch);
-		
-		if(graphic.type == Graphic.types.EFFECT && graphic.effect.isComplete()) {
-			graphic.effect.free();
-			e.deleteFromWorld();
-		}
+		graphic.draw(batch, e);
 	}
 	
 	@Override

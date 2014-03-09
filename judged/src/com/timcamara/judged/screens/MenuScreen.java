@@ -189,7 +189,7 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClearColor(0,0,0.2f,1);
 	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	    
-	    stage.act(Gdx.graphics.getDeltaTime());
+	    stage.act(delta);
 	    stage.draw();
 	    
 	    if(JudgedGame.dev_mode) {

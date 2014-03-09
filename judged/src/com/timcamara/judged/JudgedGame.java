@@ -27,8 +27,8 @@ public class JudgedGame extends Game {
 	@Override
 	public void create() {
 		Json json = new Json();
-		levels = json.fromJson(LevelList.class, Gdx.files.internal("json/endless.json")).levels;
-//		levels = json.fromJson(LevelList.class, Gdx.files.internal("json/levels.json")).levels;
+//		levels = json.fromJson(LevelList.class, Gdx.files.internal("json/endless.json")).levels;
+		levels = json.fromJson(LevelList.class, Gdx.files.internal("json/levels.json")).levels;
 //		levels = json.fromJson(LevelList.class, Gdx.files.internal("json/endgame.json")).levels;
 		
 //		ArrayList<Temple> temple_array = new ArrayList<Temple>();

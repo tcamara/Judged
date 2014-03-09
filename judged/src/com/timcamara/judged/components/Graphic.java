@@ -1,34 +1,44 @@
 package com.timcamara.judged.components;
 
 import com.artemis.Component;
+import com.artemis.Entity;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.timcamara.judged.JudgedGame;
 
 public class Graphic extends Component {
 	public Sprite       sprite;
 	public PooledEffect effect;
+	public Stage        stage;
 	public types        type;
 	public static enum  types {
+		EFFECT,
 		SPRITE,
-		EFFECT
+		STAGE
 	}
 	
 	// Sprite Constructor
 	public Graphic(TextureAtlas.AtlasRegion region) {
 		type = types.SPRITE;
 		
-		sprite  = new Sprite(region);
+		this.sprite  = new Sprite(region);
 	}
 	
 	// Effect Constructor
 	public Graphic(PooledEffect pe) {
 		type = types.EFFECT;
 		
-		effect = pe;
+		this.effect = pe;
+	}
+	
+	public Graphic(Stage stage) {
+		type = types.STAGE;
+		
+		this.stage = stage;
 	}
 	
 	public void setPosition(float x, float y, float delta) {
@@ -40,17 +50,29 @@ public class Graphic extends Component {
 			effect.setPosition(x, y);
 			effect.update(delta);
 		}
+		else if(type == types.STAGE) {
+			// Nothing needed
+		}
 		else {
 			throw new IllegalArgumentException("Graphic.setPosition called with invalid type.");
 		}
 	}
 	
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, Entity e) {
 		if(type == types.SPRITE) {
 			this.sprite.draw(batch);
 		}
 		else if(type == types.EFFECT) {
 			effect.draw(batch);
+			
+			if(effect.isComplete()) {
+				effect.free();
+				e.deleteFromWorld();
+			}
+		}
+		else if(type == types.STAGE) {
+			stage.act();
+			stage.draw();
 		}
 		else {
 			throw new IllegalArgumentException("Graphic.draw called with invalid type.");

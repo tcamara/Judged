@@ -11,6 +11,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.timcamara.judged.EntityFactory;
 import com.timcamara.judged.JudgedGame;
 import com.timcamara.judged.Level;
@@ -35,6 +38,8 @@ public class GameScreen implements Screen {
 	private Level				  level;
 	private ParticleEffect        particle_effect;
 	private ParticleEffectPool    particle_effect_pool;
+	private Stage                 stage;
+	private Skin                  button_skin;
 	
 	public GameScreen(JudgedGame game) {
 		// Load texture atlas
@@ -69,6 +74,12 @@ public class GameScreen implements Screen {
 		world.setManager(new GroupManager());
 		world.setManager(new TagManager());
 		
+		// Add Scene2D stuff for UI
+		stage = EntityFactory.createStage(world);
+		button_skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+		Table table = EntityFactory.createTable();
+		stage.addActor(table);
+		
 		// Add level stuff
 		EntityFactory.createPlayer(world);
 		EntityFactory.createBackground(world, atlas, level.background);
@@ -100,6 +111,7 @@ public class GameScreen implements Screen {
 	    
 	    if(JudgedGame.dev_mode) {
 	    	fps.log();
+	    	Table.drawDebug(stage);
 	    }
 	}
 	
@@ -108,6 +120,7 @@ public class GameScreen implements Screen {
 		screen_camera.viewportWidth = width;
 		screen_camera.viewportHeight = height;
 		screen_camera.update();
+		stage.setViewport(width, height, true);
 		
 		JudgedGame.screen_width = width;
 		JudgedGame.screen_height = height;
@@ -138,5 +151,7 @@ public class GameScreen implements Screen {
 		atlas.dispose();
 		particle_effect.dispose();
 		graphicRenderSystem.dispose();
+		stage.dispose();
+		button_skin.dispose();
 	}
 }
