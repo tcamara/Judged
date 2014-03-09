@@ -11,8 +11,6 @@ public class MainActivity extends AndroidApplication {
         super.onCreate(savedInstanceState);
         
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
-        cfg.useAccelerometer = false;
-        cfg.useCompass = false;
         
         initialize(new JudgedGame(), cfg);
     }
