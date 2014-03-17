@@ -23,6 +23,7 @@ import com.timcamara.judged.systems.GraphicRenderSystem;
 import com.timcamara.judged.systems.HereticMovementSystem;
 import com.timcamara.judged.systems.HereticSpawnerSystem;
 import com.timcamara.judged.systems.InputSystem;
+import com.timcamara.judged.systems.UiSystem;
 
 public class GameScreen implements Screen {
 	private OrthographicCamera    screen_camera;
@@ -34,12 +35,13 @@ public class GameScreen implements Screen {
 	private HereticSpawnerSystem  hereticSpawnerSystem;
 	private InputSystem           inputSystem;
 	private CollisionSystem       collisionSystem;
+	private UiSystem              uiSystem;
 	private FPSLogger             fps;
 	private Level				  level;
 	private ParticleEffect        particle_effect;
 	private ParticleEffectPool    particle_effect_pool;
 	private Stage                 stage;
-	private Skin                  button_skin;
+	private Skin                  ui_skin;
 	
 	public GameScreen(JudgedGame game) {
 		// Load texture atlas
@@ -64,21 +66,20 @@ public class GameScreen implements Screen {
 		particle_effect = EntityFactory.createParticleEffect("effects/first.p");
 		particle_effect_pool = EntityFactory.createParticleEffectPool(particle_effect, 0, 70);
 		
+		// Prepare for UI
+		stage = new Stage(JudgedGame.screen_width, JudgedGame.screen_height, true);
+		ui_skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+		
 		world = new World();
 		graphicRenderSystem   = world.setSystem(new GraphicRenderSystem(screen_camera, world_camera), true);
 		hereticMovementSystem = world.setSystem(new HereticMovementSystem(), true);
 		hereticSpawnerSystem  = world.setSystem(new HereticSpawnerSystem(atlas, level), true);
 		inputSystem           = world.setSystem(new InputSystem(screen_camera), true);
 		collisionSystem       = world.setSystem(new CollisionSystem(world, game, world_camera, particle_effect_pool), true);
+		uiSystem              = world.setSystem(new UiSystem(world, game, stage, ui_skin));
 		world.initialize();
 		world.setManager(new GroupManager());
 		world.setManager(new TagManager());
-		
-		// Add Scene2D stuff for UI
-		stage = EntityFactory.createStage(world);
-		button_skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-		Table table = EntityFactory.createTable();
-		stage.addActor(table);
 		
 		// Add level stuff
 		EntityFactory.createPlayer(world);
@@ -108,6 +109,10 @@ public class GameScreen implements Screen {
 	    hereticSpawnerSystem.process();
 	    inputSystem.process();
 	    collisionSystem.process();
+	    uiSystem.process();
+	    
+	    stage.act();
+	    stage.draw();
 	    
 	    if(JudgedGame.dev_mode) {
 	    	fps.log();
@@ -152,6 +157,6 @@ public class GameScreen implements Screen {
 		particle_effect.dispose();
 		graphicRenderSystem.dispose();
 		stage.dispose();
-		button_skin.dispose();
+		ui_skin.dispose();
 	}
 }

@@ -7,18 +7,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.timcamara.judged.JudgedGame;
 
 public class Graphic extends Component {
 	public Sprite       sprite;
 	public PooledEffect effect;
-	public Stage        stage;
 	public types        type;
 	public static enum  types {
 		EFFECT,
-		SPRITE,
-		STAGE
+		SPRITE
 	}
 	
 	// Sprite Constructor
@@ -35,12 +32,6 @@ public class Graphic extends Component {
 		this.effect = pe;
 	}
 	
-	public Graphic(Stage stage) {
-		type = types.STAGE;
-		
-		this.stage = stage;
-	}
-	
 	public void setPosition(float x, float y, float delta) {
 		if(type == types.SPRITE) {
 			this.sprite.setPosition(x, y);
@@ -49,9 +40,6 @@ public class Graphic extends Component {
 			y = JudgedGame.screen_height - y; // TODO: this really shouldn't be necessary
 			effect.setPosition(x, y);
 			effect.update(delta);
-		}
-		else if(type == types.STAGE) {
-			// Nothing needed
 		}
 		else {
 			throw new IllegalArgumentException("Graphic.setPosition called with invalid type.");
@@ -69,10 +57,6 @@ public class Graphic extends Component {
 				effect.free();
 				e.deleteFromWorld();
 			}
-		}
-		else if(type == types.STAGE) {
-			stage.act();
-			stage.draw();
 		}
 		else {
 			throw new IllegalArgumentException("Graphic.draw called with invalid type.");

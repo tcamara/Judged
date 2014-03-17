@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -61,10 +60,12 @@ public class EntityFactory {
 		return table;
 	}
 	
-	public static void createLabel(String text, Skin button_skin, Table table) {
+	public static Label createLabel(String text, Skin button_skin, Table table) {
 		Label label = new Label(text, button_skin);
 		
 		table.add(label).padBottom(10);
+		
+		return label;
 	}
 	
 	public static void createButton(String text, Skin button_skin, Table table, InputListener inputListener) {
@@ -72,16 +73,6 @@ public class EntityFactory {
 		button.addListener(inputListener);
 		
 		table.add(button).pad(10);
-	}
-	
-	public static Stage createStage(World world) {
-		Entity stage_entity = world.createEntity();
-		Stage stage = new Stage(JudgedGame.screen_width, JudgedGame.screen_height, true);
-		stage_entity.addComponent(new Graphic(stage));
-		
-		stage_entity.addToWorld();
-		
-		return stage;
 	}
 	
 	public static Entity createPlayer(World world) {
