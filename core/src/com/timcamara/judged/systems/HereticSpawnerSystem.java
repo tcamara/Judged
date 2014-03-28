@@ -56,22 +56,22 @@ public class HereticSpawnerSystem extends EntityProcessingSystem {
 		
 		while(difference > 1) {
 			int choice = rand.nextInt(4);
-			int x = -1;
-			int y = -1;
+			int x = -100;
+			int y = -100;
 			
 			if(choice == 0) { // left side
-				y = rand.nextInt(JudgedGame.world_height);
+				y = rand.nextInt(JudgedGame.screen_height);
 			}
 			else if(choice == 1) { // top side
-				x = rand.nextInt(JudgedGame.world_width);
-				y = JudgedGame.world_height + 1;
+				x = rand.nextInt(JudgedGame.screen_width);
+				y = JudgedGame.screen_height + 1;
 			}
 			else if(choice == 2) { // right side
-				x = JudgedGame.world_width + 1;
-				y = rand.nextInt(JudgedGame.world_height);
+				x = JudgedGame.screen_width + 1;
+				y = rand.nextInt(JudgedGame.screen_height);
 			}
 			else { // bottom side
-				x = rand.nextInt(JudgedGame.world_width);
+				x = rand.nextInt(JudgedGame.screen_width);
 			}
 			
 			EntityFactory.createHeretic(world, atlas, chosen.image, x, y, chosen.speed, chosen.health, chosen.damage, chosen.worth);

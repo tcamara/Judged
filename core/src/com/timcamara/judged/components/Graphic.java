@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
-import com.timcamara.judged.JudgedGame;
 
 public class Graphic extends Component {
 	public Sprite       sprite;
@@ -37,7 +36,6 @@ public class Graphic extends Component {
 			this.sprite.setPosition(x, y);
 		}
 		else if(type == types.EFFECT) {
-			y = JudgedGame.screen_height - y; // TODO: this really shouldn't be necessary
 			effect.setPosition(x, y);
 			effect.update(delta);
 		}

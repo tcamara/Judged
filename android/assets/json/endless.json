@@ -6,7 +6,7 @@ levels: [
 		background: gradient,
 		enemies: [
 			{
-				speed: 2,
+				speed: 50,
 				worth: 1,
 				damage: 1,
 				spawn_chance: 100,
@@ -17,8 +17,8 @@ levels: [
 		temples: [
 			{
 				position: {
-					x: 7,
-					y: 3
+					x: 600,
+					y: 300
 				},
 				image: shrine_large,
 				health: 30000

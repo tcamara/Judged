@@ -5,23 +5,23 @@ import com.artemis.Entity;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.timcamara.judged.JudgedGame;
 import com.timcamara.judged.components.Player;
 import com.timcamara.judged.components.Position;
 
 public class InputSystem extends EntityProcessingSystem implements InputProcessor {	
-	public Vector3 touch      = new Vector3();
+	public Vector2 touch      = new Vector2();
 	public boolean is_touched = false;
-	public OrthographicCamera camera;
+	public Viewport viewport;
 	
 	@SuppressWarnings("unchecked")
-	public InputSystem(OrthographicCamera camera) {
+	public InputSystem(Viewport viewport) {
 		super(Aspect.getAspectForAll(Player.class, Position.class));
 		
-		// Set camera so we can unproject
-		this.camera = camera;
+		// Set viewport so we can unproject
+		this.viewport = viewport;
 	}
 	
 	@Override
@@ -40,9 +40,11 @@ public class InputSystem extends EntityProcessingSystem implements InputProcesso
 			System.out.println("TouchDown on: (" + screenX + ", " + screenY + ")");
 		}
 		
-		touch.set(screenX, screenY, 0);
-		camera.unproject(touch); // Unprojecting gets us the coordinates in the proper coordinate system
+		touch.set(screenX, screenY);
 		is_touched = true;
+		
+		// Unprojecting gets us the coordinates in the proper coordinate system
+		viewport.unproject(touch);
 		
 		return false;
 	}

@@ -9,8 +9,6 @@ import com.timcamara.judged.screens.MenuScreen;
 public class JudgedGame extends Game {
 	public static int     screen_width  = 1280;
 	public static int     screen_height = 720;
-	public static int     world_width   = 16;
-	public static int     world_height  = 9;
 	public static boolean dev_mode      = false;
 	public static int     score         = 0;
 	public static int     level         = 0;

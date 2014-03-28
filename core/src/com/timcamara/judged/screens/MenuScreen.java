@@ -1,7 +1,7 @@
 package com.timcamara.judged.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.timcamara.judged.EntityFactory;
 import com.timcamara.judged.JudgedGame;
 
-public class MenuScreen implements Screen {
+public class MenuScreen extends ScreenAdapter {
 	private Stage      stage;
 	private JudgedGame game;
 	private Skin       button_skin;
@@ -175,19 +175,22 @@ public class MenuScreen implements Screen {
 	public void startGame() {
 		JudgedGame.level = 0;
 		game.setScreen(new GameScreen(game));
+		dispose();
 	}
 	
 	public void continueGame() {
 		game.setScreen(new GameScreen(game));
+		dispose();
 	}
 	
 	public void exitGame() {
+		dispose();
 		Gdx.app.exit();
 	}
 	
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0,0,0.2f,1);
+		Gdx.gl.glClearColor(0,0,0,1);
 	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	    
 	    stage.act(delta);
@@ -204,28 +207,8 @@ public class MenuScreen implements Screen {
 	}
 	
 	@Override
-	public void show() {
-		
-	}
-	
-	@Override
-	public void hide() {
-		dispose();
-	}
-	
-	@Override
-	public void pause() {
-		
-	}
-	
-	@Override
-	public void resume() {
-		
-	}
-	
-	@Override
 	public void dispose() {
-		stage.dispose();
 		button_skin.dispose();
+		stage.dispose();
 	}
 }

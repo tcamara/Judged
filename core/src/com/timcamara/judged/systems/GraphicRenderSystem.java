@@ -9,7 +9,6 @@ import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
 import com.timcamara.judged.components.Graphic;
 import com.timcamara.judged.components.Position;
 
@@ -17,20 +16,13 @@ public class GraphicRenderSystem extends EntitySystem {
 	@Mapper ComponentMapper<Position> pm;
 	@Mapper ComponentMapper<Graphic> sm;
 	
-	private OrthographicCamera screen_camera;
-	private OrthographicCamera world_camera;
+	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	
 	@SuppressWarnings("unchecked")
-	public GraphicRenderSystem(OrthographicCamera screen_camera, OrthographicCamera world_camera) {
+	public GraphicRenderSystem(OrthographicCamera camera) {
 		super(Aspect.getAspectForAll(Position.class, Graphic.class));
-		this.screen_camera = screen_camera;
-		this.world_camera = world_camera;
-	}
-	
-	// TODO: this should really be built into Artemis
-	public void dispose() {
-		batch.dispose();
+		this.camera = camera;
 	}
 	
 	@Override
@@ -52,7 +44,7 @@ public class GraphicRenderSystem extends EntitySystem {
 	
 	@Override
 	protected void begin() {
-		batch.setProjectionMatrix(screen_camera.combined);
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 	}
 	
@@ -60,17 +52,18 @@ public class GraphicRenderSystem extends EntitySystem {
 		Position position = pm.get(e);
 		Graphic graphic = sm.get(e);
 		
-		// Translate from world coordinates to screen coordinates
-		Vector3 unprojected = new Vector3(position.x, position.y, 0);
-		world_camera.project(unprojected);
-		
 		// Set position, then call the draw method in the graphic component
-		graphic.setPosition(unprojected.x, unprojected.y, Gdx.graphics.getDeltaTime());
+		graphic.setPosition(position.x, position.y, Gdx.graphics.getDeltaTime());
 		graphic.draw(batch, e);
 	}
 	
 	@Override
 	protected void end() {
 		batch.end();
+	}
+	
+	@Override
+	public void dispose() {
+		batch.dispose();
 	}
 }

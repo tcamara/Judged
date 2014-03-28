@@ -32,8 +32,6 @@ public class UiSystem extends EntityProcessingSystem {
 	
 	@Override
 	protected void process(Entity e) {
-		Player player = pm.getSafe(e);
-		
-		score_label.setText(String.valueOf(player.score));
+		score_label.setText(String.valueOf(pm.getSafe(e).score));
 	}
 }
