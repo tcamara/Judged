@@ -2,23 +2,44 @@ pack_dev.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-gradient
+shrine_large
   rotate: false
-  xy: 2, 2
-  size: 1920, 1080
-  orig: 1920, 1080
-  offset: 0, 0
-  index: -1
+  xy: 122, 724
+  size: 56, 170
+  orig: 58, 170
+  offset: 2, 0
+  index: 3
 skeleton_priest_large
   rotate: false
-  xy: 1984, 2
+  xy: 60, 896
   size: 58, 96
-  orig: 58, 96
+  orig: 70, 120
+  offset: 6, 12
+  index: -1
+skeleton_large
+  rotate: false
+  xy: 2, 896
+  size: 56, 98
+  orig: 70, 120
+  offset: 6, 12
+  index: -1
+shrine_large
+  rotate: false
+  xy: 2, 724
+  size: 58, 170
+  orig: 58, 170
+  offset: 0, 0
+  index: 2
+background
+  rotate: false
+  xy: 2, 2
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: -1
 shrine_large
   rotate: false
-  xy: 1924, 2
+  xy: 62, 724
   size: 58, 170
   orig: 58, 170
   offset: 0, 0

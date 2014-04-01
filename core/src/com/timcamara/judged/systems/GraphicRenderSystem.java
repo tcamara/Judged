@@ -7,8 +7,8 @@ import com.artemis.EntitySystem;
 import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.timcamara.judged.components.Graphic;
 import com.timcamara.judged.components.Position;
 
@@ -16,13 +16,13 @@ public class GraphicRenderSystem extends EntitySystem {
 	@Mapper ComponentMapper<Position> pm;
 	@Mapper ComponentMapper<Graphic> sm;
 	
-	private OrthographicCamera camera;
+	private Viewport viewport;
 	private SpriteBatch batch;
 	
 	@SuppressWarnings("unchecked")
-	public GraphicRenderSystem(OrthographicCamera camera) {
+	public GraphicRenderSystem(Viewport viewport) {
 		super(Aspect.getAspectForAll(Position.class, Graphic.class));
-		this.camera = camera;
+		this.viewport = viewport;
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class GraphicRenderSystem extends EntitySystem {
 	
 	@Override
 	protected void begin() {
-		batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(viewport.getCamera().combined);
 		batch.begin();
 	}
 	

@@ -22,7 +22,6 @@ import com.timcamara.judged.components.Player;
 import com.timcamara.judged.components.Position;
 import com.timcamara.judged.components.Velocity;
 import com.timcamara.judged.components.Worth;
-import com.timcamara.judged.screens.MenuScreen;
 
 public class CollisionSystem extends EntityProcessingSystem {
 	@Mapper ComponentMapper<Damage>  dm;
@@ -57,6 +56,7 @@ public class CollisionSystem extends EntityProcessingSystem {
 		
 		// Check for collisions with touch event (e.g., hit by player)
 		if(inputSystem.is_touched && pointCollisionExists(gm.get(e), inputSystem.touch)) {
+			inputSystem.is_touched = false;
 			hereticPlayerCollision(e, inputSystem.touch);
 		}
 		
@@ -66,7 +66,7 @@ public class CollisionSystem extends EntityProcessingSystem {
 		// If no more temples left, level is lost
 		if(bag.isEmpty()) {
 			JudgedGame.score = player.score;
-			game.setScreen(new MenuScreen(game, JudgedGame.menus.LEVEL_LOSS));
+			game.setScreen(game.level_loss_screen);
 		}
 		
 		// Check for collisions with temples
@@ -98,26 +98,26 @@ public class CollisionSystem extends EntityProcessingSystem {
 		Health heretic_health  = hm.get(heretic);
 		Worth worth            = wm.get(heretic);
 		
-		// Play effect
-		EntityFactory.createPooledEffect(world, particle_effect_pool, touch.x, touch.y);
-		
 		// Deal damage to the heretic
-		if(heretic_health.hit()) {
+		if(!heretic_health.hit()) {
+			// Play death effect
+			EntityFactory.createPooledEffect(world, particle_effect_pool, touch.x, touch.y);
+			
 			// Heretic is dead
 			heretic.deleteFromWorld();
 			
 			// Add heretic's worth to player's score
 			player.change_score(worth.value);
 			
-			if(JudgedGame.dev_mode) {
-				System.out.println("Score: " + player.score);
-			}
-			
 			// If we've reached the goal score, end the level
 			if(player.score >= level.goal_score) {
 				JudgedGame.score = player.score;
-				game.setScreen(new MenuScreen(game, JudgedGame.menus.LEVEL_WIN));
+				game.setScreen(game.level_win_screen);
 			}
+		}
+		else {
+			// Play hit effect
+			EntityFactory.createPooledEffect(world, particle_effect_pool, touch.x, touch.y);
 		}
 	}
 	
@@ -126,7 +126,7 @@ public class CollisionSystem extends EntityProcessingSystem {
 		Health temple_health  = hm.get(temple);
 		
 		// Deal damage to the temple
-		if(temple_health.hit(heretic_damage.amount)) {
+		if(!temple_health.hit(heretic_damage.amount)) {
 			// Temple is destroyed
 			temple.deleteFromWorld();
 		}

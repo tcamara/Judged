@@ -14,7 +14,7 @@ public class Health extends Component {
 	}
 	
 	public boolean is_alive() {
-		return amount == 0;
+		return amount > 0;
 	}
 	
 	public boolean hit() {

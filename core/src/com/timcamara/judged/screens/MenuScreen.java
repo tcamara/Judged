@@ -8,34 +8,32 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.timcamara.judged.EntityFactory;
 import com.timcamara.judged.JudgedGame;
 
 public class MenuScreen extends ScreenAdapter {
-	private Stage      stage;
-	private JudgedGame game;
-	private Skin       button_skin;
+	private Stage            stage;
+	private JudgedGame       game;
+	private JudgedGame.menus menu;
+	private Skin             button_skin;
+	private Table            table;
 	
-	public MenuScreen(JudgedGame game, JudgedGame.menus menu) {
-		this.game  = game;
-		
-		// If we won a level and there are no more levels left, we won the game
-		// This is kinda hacky, consider making a ScoringSystem or something
-		if(menu == JudgedGame.menus.LEVEL_WIN) {
-			try {
-				JudgedGame.levels.get(++JudgedGame.level);
-			}
-			catch(IndexOutOfBoundsException e) {
-				menu = JudgedGame.menus.GAME_WIN;
-			}
-		}
+	public MenuScreen(JudgedGame game, Viewport viewport, JudgedGame.menus menu) {
+		this.game = game;
+		this.menu = menu;
 		
 		button_skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-		stage = new Stage(new FitViewport(JudgedGame.screen_width, JudgedGame.screen_height));
+		stage = new Stage(viewport);
 		Gdx.input.setInputProcessor(stage);
 		
-		Table table = EntityFactory.createTable();
+		table = EntityFactory.createTable();
+	}
+	
+	@Override
+	public void show() {
+		// Make sure stage is good to go
+		Gdx.input.setInputProcessor(stage);
 		stage.addActor(table);
 		
 		if(menu == JudgedGame.menus.TITLE) {
@@ -110,6 +108,15 @@ public class MenuScreen extends ScreenAdapter {
 			);
 		}
 		else if(menu == JudgedGame.menus.LEVEL_WIN) {
+			// If we won a level and there are no more levels left, we won the game
+			// This is kinda hacky, consider making a ScoringSystem or something
+			try {
+				JudgedGame.levels.get(++JudgedGame.level);
+			}
+			catch(IndexOutOfBoundsException e) {
+				game.setScreen(game.game_win_screen);
+			}
+			
 			EntityFactory.createLabel("Level Complete", button_skin, table);
 			table.row();
 			EntityFactory.createLabel("Your Score: " + JudgedGame.score, button_skin, table);
@@ -174,12 +181,12 @@ public class MenuScreen extends ScreenAdapter {
 	
 	public void startGame() {
 		JudgedGame.level = 0;
-		game.setScreen(new GameScreen(game));
+		game.setScreen(game.game_screen);
 		dispose();
 	}
 	
 	public void continueGame() {
-		game.setScreen(new GameScreen(game));
+		game.setScreen(game.game_screen);
 		dispose();
 	}
 	
